@@ -1,0 +1,278 @@
+﻿<!--_meta 作为公共模版分离出去-->
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<link rel="Bookmark" href="favicon.ico" >
+<link rel="Shortcut Icon" href="favicon.ico" />
+<!--[if lt IE 9]>
+<script type="text/javascript" src="lib/html5.js"></script>
+<script type="text/javascript" src="lib/respond.min.js"></script>
+<![endif]-->
+<link rel="stylesheet" type="text/css" href="static/h-ui/css/H-ui.min.css" />
+<link rel="stylesheet" type="text/css" href="static/h-ui.admin/css/H-ui.admin.css" />
+<link rel="stylesheet" type="text/css" href="lib/Hui-iconfont/1.0.8/iconfont.css" />
+<link rel="stylesheet" type="text/css" href="static/h-ui.admin/skin/default/skin.css" id="skin" />
+<link rel="stylesheet" type="text/css" href="static/h-ui.admin/css/style.css" />
+<!--[if IE 6]>
+<script type="text/javascript" src="http://lib.h-ui.net/DD_belatedPNG_0.0.8a-min.js" ></script>
+<script>DD_belatedPNG.fix('*');</script><![endif]-->
+<!--/meta 作为公共模版分离出去-->
+
+<title>考勤报表</title>
+</head>
+<body>
+<nav class="breadcrumb">
+    <i class="Hui-iconfont">&#xe67f;</i>&nbsp;首页
+    <span class="c-green en">&gt;</span>
+    <span class="c-green en">&gt;</span>考勤报表
+    <a class="btn btn-success-outline radius r" style="line-height: 1.6em;margin-top: 3px"
+       href="javascript:location.replace(location.href);" title="刷新">
+        <i class="Hui-iconfont">&#xe68f;</i>
+    </a>
+</nav>
+<div class="row cl text-c mt-20">
+    <div style="margin-left:50px;" class="row cl ml-5">
+        <label class="form-label col-xs-1 mt-10" for="aDept">
+            部门:
+        </label>
+        <div class="formControls col-xs-1">
+            <input  id="aDept" class="input-text col-sm-1 size-L" type="text">
+        </div>
+        &nbsp;
+        <label class="form-label col-xs-1  mt-10" for="beforeTime">
+            日期:
+        </label>
+        <div class="formControls col-xs-2">
+            <input  id="beforeTime" class="input-text size-L" type="month">
+        </div>
+        <button name="btnLogin" id="btnLogin" class="btn btn-success size-L radius">
+            <i class="Hui-iconfont">&#xe665;</i> 查询
+        </button>
+        &nbsp;
+        <button name="btnLogin" id="btnExcel" class="btn btn-secondary size-L radius">
+            <i class="Hui-iconfont">&#xe640;</i> 打印报表
+        </button>
+        &nbsp;
+        <button id="heighchart" class="btn btn-secondary size-L radius">
+            <i class="Hui-iconfont">&#xe640;</i> 查看图表
+        </button>
+
+    </div>
+
+</div>
+
+<div class="page-container">
+    <table id="selfafl-table" class="table table-border table-bordered table-hover table-bg table-sort"
+           style="margin: 30px;">
+        <thead>
+        <tr class="text-c">
+            <td>ID</td>
+            <td>useID</td>
+            <td>用户名</td>
+            <td>上班打卡</td>
+            <td>状态</td>
+            <td>下班打卡</td>
+            <td>状态</td>
+            <td>距离</td>
+            <td>部门</td>
+            <td>备注</td>
+        </tr>
+        </thead>
+        <tfoot>
+        <tr class="text-c">
+            <td>ID</td>
+            <td>useID</td>
+            <td>用户名</td>
+            <td>上班打卡</td>
+            <td>状态</td>
+            <td>下班打卡</td>
+            <td>状态</td>
+            <td>距离</td>
+            <td>部门</td>
+            <td>备注</td>
+        </tr>
+        </tfoot>
+        <tbody>
+        </tbody>
+    </table>
+    <br><br>
+</div>
+
+<div class="container" id="container">
+    <!--图表-->
+</div>
+<div class="footer">Copyright &copy;2018-2028 Newer All Rights Reserved.</div>
+<!--_footer 作为公共模版分离出去-->
+<script type="text/javascript" src="lib/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="lib/layer/2.4/layer.js"></script>
+<script type="text/javascript" src="static/h-ui/js/H-ui.js"></script>
+<script type="text/javascript" src="static/h-ui.admin/js/H-ui.admin.page.js"></script>
+<!--/_footer /作为公共模版分离出去-->
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="lib/My97DatePicker/4.8/WdatePicker.js"></script>
+<script type="text/javascript" src="js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="lib/laypage/1.2/laypage.js"></script>
+<!--图表js-->
+<script type="text/javascript" src="js/highcharts/highcharts.js"></script>
+
+<script type="text/javascript">
+    // 将本人的打卡记录都查询出来
+    $(window).on('load',function () {
+        // 隐藏表格
+        $("table").hide()
+        fetch()
+        // 模糊查询
+        $("#btnLogin").click(function () {
+            fetch()
+        })
+        
+        //打印报表
+        $("#btnExcel").click(function () {
+            var formData = {
+                "aDept":$("#aDept").val(),
+                "beginTime":$("#beforeTime").val()
+            }
+            location.href = "/attendance/Excel/download?aDept="+$("#aDept").val()+"&beginTime="+$("#beforeTime").val()
+        })
+
+        //初始化图表
+        $("#heighchart").click(function () {
+            var x=[];   //x轴
+            var y=[];   //y轴
+            var xtext=[]    //x轴TEXT
+            var color = ["gray","pink","red","blue","yellow","green","#fff"]
+            $.ajax({
+                type:'get',
+                url:'/attendance/Excel/createPic?aDept='+$("#aDept").val()+"&beginTime="+$("#beforeTime").val(),
+                dataType:'json',
+                success:function (data) {
+                    JSON.stringify(data)
+                    for(var p in data){
+                        // console.log(data.key())
+                        if(data.hasOwnProperty(p)){
+                            // 给Y轴复制
+                            y = data[p]
+                            // 给X轴TEXT赋值
+                            xtext = p
+                            color = color[p]
+                            // 将map文件中的键和值转换出来
+                            /*alert("key : "+p+" value:"+data[p])*/
+                            chart.series[0].setData(data[p])
+                        }
+                    }
+
+                }
+            });
+
+            var chart = new Highcharts.Chart({
+                chart:{
+                    renderTo:'container',
+                    type:'column'
+                },
+                subtitle: {
+                    text: '数据来源: HR人力资源管理考情系统'
+                },
+                title:{
+                    text:'部门员工当月考勤'
+                },
+                xAxis:{
+                    categories:["user1","user2","user3"],
+                    title:{
+                        text:null
+                    }
+                },
+                yAxis:{
+                    title:{
+                        text:'成功'
+                    },
+                },
+                series:[{
+                    name: '东京',
+                    data: [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4]
+                }, {
+                    name: '纽约',
+                    data: [83.6, 78.8, 98.5, 93.4, 106.0, 84.5, 105.0, 104.3, 91.2, 83.5, 106.6, 92.3]
+                }, {
+                    name: '伦敦',
+                    data: [48.9, 38.8, 39.3, 41.4, 47.0, 48.3, 59.0, 59.6, 52.4, 65.2, 59.3, 51.2]
+                }, {
+                    name: '柏林',
+                    data: [42.4, 33.2, 34.5, 39.7, 52.6, 75.5, 57.4, 60.4, 47.6, 39.1, 46.8, 51.1]
+                }]
+            })
+        })
+
+    })
+
+    function fetch(aDept,beforeTime) {
+        var formData = {
+            "aDept":$("#aDept").val(),
+            "beginTime":$("#beforeTime").val()
+        }
+        console.log('日期',formData)
+        $.ajax({
+            type:'get',
+            url:'/attendance/Excel/attendances',
+            dataType:'json',
+            data:formData,
+            success:function (data) {
+                if (data) {
+                    $("tbody").empty()
+                    $("table").show()
+                }
+                var text = ``
+                $.each(data, (i, att) => {
+                    console.log(att.endTime)
+                    var amType = ``
+                    if(att.amType == 'Y'){
+                        amType = '正常'
+                    }else if(att.amType == 'N'){
+                        amType = '迟到'
+                    }else if(att.amType == 'T'){
+                        amType = '缺勤'
+                    }
+                    var pmType = ``
+                    if(att.pmType == 'Y'){
+                        pmType = '正常'
+                    }else if(att.pmType == 'L'){
+                        pmType = '早退'
+                    }
+                    text += `
+						<tr class="text-c">
+							<td>${att.aID}</td>
+							<td>${att.aUserID}</td>
+							<td>${att.auserName}</td>
+							<td>${att.beginTime}</td>
+							<td>${amType}</td>
+							<td>${att.endTime}</td>
+							<td>${att.pmType}</td>
+							<td>${att.distance}</td>
+							<td>${att.aDept}</td>
+							<td>${att.attRemark}</td>
+						</tr>
+					  `
+                })
+                $("tbody").append(text)
+
+                // 实现自动分页操作
+                $(".table-hover").DataTable({
+                    language: {
+                        url: 'js/zh_CN.txt'
+                    },
+                    retrieve: true
+                })
+            }
+        })
+    }
+
+
+
+</script>
+</body>
+</html>

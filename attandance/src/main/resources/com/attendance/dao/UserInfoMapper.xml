@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--员工信息映射文件-->
+<mapper namespace="com.attendance.dao.UserInfoMapper">
+    <resultMap id="result-user" type="com.attendance.pojo.UserInfo">
+        <id property="userID" column="userID"/>
+        <result property="loginID" column="loginID"/>
+        <result property="username" column="username"/>
+        <result property="password" column="password"/>
+        <result property="Regdate" column="Regdate"/>
+        <result property="rights" column="rights"/>
+        <result property="ismanager" column="ismanager"/>
+        <result property="dept" column="dept"/>
+        <result property="salary" column="salary"/>
+        <result property="schedulingID" column="schedulingID"/>
+    </resultMap>
+
+    <select id="findByDate" resultMap="result-user">
+        select userID,loginID,username,password,Regdate,rights,ismanager,dept,salary,schedulingID from userinfo
+        <where>
+           1=1
+          <if test="beginDate!=null and endDate!=null">
+            and Regdate between #{beginDate} and #{endDate}
+          </if>
+        </where>
+        /*order by userinfo desc*/
+    </select>
+
+</mapper>

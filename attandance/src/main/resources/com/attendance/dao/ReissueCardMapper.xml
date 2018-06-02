@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--补卡映射文件-->
+<mapper namespace="com.attendance.dao.ReissueCardMapper">
+    <resultMap id="result-rcard" type="com.attendance.pojo.ReissueCard">
+        <id property="rID" column="rID"/>
+        <result property="rUserID" column="rUserID"/>
+        <result property="rUserName" column="rUserName"/>
+        <result property="rDept" column="rDept"/>
+        <result property="rDate" column="rDate"/>
+        <result property="rType" column="rType"/>
+        <result property="rchargeName" column="rchargeName"/>
+        <result property="rchargeComment" column="rchargeComment"/>
+        <result property="rchargeDate" column="rchargeDate"/>
+        <result property="rhrName" column="rhrName"/>
+        <result property="rhrComment" column="rhrComment"/>
+        <result property="rhrDate" column="rhrDate"/>
+        <result property="rStep" column="rStep"/>
+        <result property="reason" column="reason"/>
+    </resultMap>
+    <select id="findSelfRC" resultMap="result-rcard">
+        SELECT rID,rUserID,rUserName,rDept,rDate,rType,rStep,reason from reissuecard
+        <where>
+            rUserID=#{rUserID}
+            <if test="beginDate != null and endDate != null">
+                and rDate BETWEEN #{beginDate} and #{endDate}
+            </if>
+        </where>
+    </select>
+    <select id="findChargeRC" resultMap="result-rcard">
+        SELECT rID,rUserID,rUserName,rDept,rDate,rType,rStep,reason from reissuecard
+        <where>
+            rDept=#{rDept} and rStep=1
+            <if test="beginDate != null and endDate != null">
+                and rDate BETWEEN #{beginDate} and #{endDate}
+            </if>
+        </where>
+    </select>
+    <select id="findHrRC" resultMap="result-rcard">
+        SELECT rID,rUserID,rUserName,rDept,rDate,rType,rStep,reason from reissuecard
+        <where>
+            (rStep=2 or (rDept = "HR" and rStep=1))
+            <if test="beginDate != null and endDate != null">
+                and rDate BETWEEN #{beginDate} and #{endDate}
+            </if>
+        </where>
+    </select>
+</mapper>

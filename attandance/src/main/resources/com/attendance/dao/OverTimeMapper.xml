@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--请假映射文件-->
+<mapper namespace="com.attendance.dao.OverTimeMapper">
+    <resultMap id="result-ovt" type="com.attendance.pojo.OverTime">
+        <id property="oid" column="oid"/>
+        <result property="oUserID" column="oUserID"/>
+       <!-- 又是Mapper小问题找了N久？？？-->
+        <result property="oUserName" column="oUserName"/>
+        <result property="overTimeDate" column="overTimeDate"/>
+        <result property="hours" column="hours"/>
+        <result property="reason" column="reason"/>
+        <result property="oStartTime" column="oStartTime"/>
+        <result property="oEndTime" column="oEndTime"/>
+        <result property="ochargeName" column="ochargeName"/>
+        <result property="ochargeComment" column="ochargeComment"/>
+        <result property="ochargeDate" column="ochargeDate"/>
+        <result property="ohrName" column="ohrName"/>
+        <result property="ohrComment" column="ohrComment"/>
+        <result property="ohrDate" column="ohrDate"/>
+        <result property="odept" column="odept"/>
+        <result property="ostep" column="ostep"/>
+    </resultMap>
+
+    <select id="findSelfOvt" resultMap="result-ovt">
+        select oid,oUserID,oUserName,overTimeDate,hours,ostep,odept,reason from overtime
+        <where>
+            oUserID = #{userID}
+            <if test="beginDate != null and endDate != null">
+                and overTimeDate BETWEEN #{beginDate} and #{endDate}
+            </if>
+        </where>
+    </select>
+
+    <select id="findChargeovt" resultMap="result-ovt">
+        select oid,oUserID,oUserName,overTimeDate,hours,ostep,odept,reason from overtime
+        <where>
+            odept = #{odept} and ostep=1
+            <if test="beginDate != null and endDate != null">
+                and overTimeDate BETWEEN #{beginDate} and #{endDate}
+            </if>
+        </where>
+    </select>
+
+    <select id="findHrovt" resultMap="result-ovt">
+        select oid,oUserID,oUserName,overTimeDate,hours,ostep,odept,reason from overtime
+        <where>
+            ostep=2 or (odept = "HR" and ostep=1)
+            <if test="beginDate != null and endDate != null">
+                and overTimeDate BETWEEN #{beginDate} and #{endDate}
+            </if>
+
+        </where>
+    </select>
+
+</mapper>

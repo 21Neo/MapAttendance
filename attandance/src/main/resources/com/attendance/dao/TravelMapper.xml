@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--出差映射文件-->
+<mapper namespace="com.attendance.dao.TravelMapper">
+    <resultMap id="result-travel" type="com.attendance.pojo.Travel">
+        <id property="travelID" column="travelID"/>
+        <result property="travelUserID" column="travelUserID"/>
+        <result property="travelUserName" column="travelUserName" />
+        <result property="travelDate" column="travelDate" />
+        <result property="travelDays" column="travelDays" />
+        <result property="address" column="address" />
+        <result property="cost" column="cost" />
+        <result property="tchargeName" column="tchargeName" />
+        <result property="tchargeComment" column="tchargeComment" />
+        <result property="tchargeDate" column="tchargeDate" />
+        <result property="thrName" column="thrName" />
+        <result property="thrComment" column="thrComment" />
+        <result property="thrDate" column="thrDate" />
+        <result property="tstep" column="tstep" />
+        <result property="remark" column="remark" />
+        <result property="tdept" column="tdept" />
+    </resultMap>
+    <select id="findSelfTravel" resultMap="result-travel">
+        SELECT travelID,travelUserID,travelUserName,travelDate,travelDays,address,cost,tstep,remark,tdept from travel
+        <where>
+            travelUserID=#{travelUserID}
+            <if test="beginDate != null and endDate != null">
+                and travelDate BETWEEN #{beginDate} and #{endDate}
+            </if>
+        </where>
+    </select>
+    <select id="findChargetravel" resultMap="result-travel">
+        SELECT travelID,travelUserID,travelUserName,travelDate,travelDays,address,cost,tstep,remark,tdept from travel
+        <where>
+            tdept=#{tdept} and tstep=1
+            <if test="beginDate != null and endDate != null">
+                and travelDate BETWEEN #{beginDate} and #{endDate}
+            </if>
+        </where>
+    </select>
+    <select id="findHrtravel" resultMap="result-travel">
+        SELECT travelID,travelUserID,travelUserName,travelDate,travelDays,address,cost,tstep,remark,tdept from travel
+        <where>
+            (tstep=2 or (tdept = "HR" and tstep=1))
+            <if test="beginDate != null and endDate != null">
+                and travelDate BETWEEN #{beginDate} and #{endDate}
+            </if>
+        </where>
+    </select>
+</mapper>

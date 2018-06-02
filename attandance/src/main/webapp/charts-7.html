@@ -1,0 +1,248 @@
+<!--_meta 作为公共模版分离出去-->
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<link rel="Bookmark" href="favicon.ico" >
+<link rel="Shortcut Icon" href="favicon.ico" />
+<link rel="stylesheet" type="text/css" href="static/h-ui/css/H-ui.min.css" />
+<link rel="stylesheet" type="text/css" href="static/h-ui.admin/css/H-ui.admin.css" />
+<link rel="stylesheet" type="text/css" href="lib/Hui-iconfont/1.0.8/iconfont.css" />
+<link rel="stylesheet" type="text/css" href="static/h-ui.admin/skin/default/skin.css" id="skin" />
+<link rel="stylesheet" type="text/css" href="static/h-ui.admin/css/style.css" />
+
+<title>业务管理-补卡审核</title>
+</head>
+<body>
+<nav class="breadcrumb">
+    <i class="Hui-iconfont">&#xe67f;</i>&nbsp;首页
+    <span class="c-green en">&gt;</span>业务管理
+    <span class="c-green en">&gt;</span>补卡审核
+    <a class="btn btn-success-outline radius r" style="line-height: 1.6em;margin-top: 3px"
+       href="javascript:location.replace(location.href);" title="刷新">
+        <i class="Hui-iconfont">&#xe68f;</i>
+    </a>
+</nav>
+<div class="page-container">
+    <form id="form" class="form form-horizontal">
+        <div class="row cl">
+            <label class="form-label col-xs-1" for="beginDate">
+                开始日期:
+            </label>
+            <div class="formControls col-xs-3">
+                <input id="beginDate" class="input-text size-L" type="date">
+            </div>
+            &nbsp;
+            <label class="form-label col-xs-1" for="endDate">
+                截止日期:
+            </label>
+            <div class="formControls col-xs-3">
+                <input id="endDate" class="input-text size-L" type="date">
+            </div>
+            &nbsp;
+            <input type="button" id="btnSearch"
+                   class="btn btn-success radius size-L"
+                   value="&nbsp;查&nbsp;&nbsp;&nbsp;&nbsp;询&nbsp;">
+            <input type="reset" class="btn btn-default radius size-L"
+                   value="&nbsp;重&nbsp;&nbsp;&nbsp;&nbsp;置&nbsp;">
+        </div>
+    </form>
+    <br><br>
+    <table id="chargercard-table" class="table table-border table-bordered table-hover table-bg table-sort"
+           style="margin: 30px;">
+        <thead>
+        <tr class="text-c">
+            <td>ID</td>
+            <td>用户名</td>
+            <td>部门</td>
+            <td>补卡日期</td>
+            <td>补卡类型</td>
+            <td>当前流程</td>
+            <td>补卡原因</td>
+            <td>操作</td>
+        </tr>
+        </thead>
+        <tfoot>
+        <tr class="text-c">
+            <td>ID</td>
+            <td>用户名</td>
+            <td>部门</td>
+            <td>补卡日期</td>
+            <td>补卡类型</td>
+            <td>当前流程</td>
+            <td>补卡原因</td>
+            <td>操作</td>
+        </tr>
+        </tfoot>
+        <tbody>
+        </tbody>
+    </table>
+    <br><br>
+    <div id="buka" class="container">
+        <div class="row cl">
+            <label style="margin-top:10px;" class="form-label col-xs-2" for="rDate">
+                补卡日期：
+            </label>
+            <input type="hidden" id="rID" value="0"/>
+            <div class="formControls col-xs-4">
+                <input id="rDate" placeholder="补卡日期" readonly type="date" class="input-text size-L">
+            </div>
+        </div>
+        <div class="row cl mt-5">
+            <label style="margin-top:10px;" class="form-label col-xs-2" for="rType">
+                补卡类型：
+            </label>
+            <div class="formControls col-xs-4">
+                <input id="rType" readonly type="text" class="input-text size-L">
+            </div>
+        </div>
+        <div class="row cl mt-5">
+            <label style="margin-top:10px;" class="form-label col-xs-2" for="reason">
+                补卡原因：
+            </label>
+            <div class="formControls col-xs-4">
+                <input id="reason" placeholder="补卡原因" readonly type="text" class="input-text size-L">
+            </div>
+        </div>
+        <div class="row cl mt-5">
+            <label style="margin-top:10px;" class="form-label col-xs-2" for="rchargeName">
+                部门经理姓名：
+            </label>
+            <div class="formControls col-xs-4">
+                <input id="rchargeName" placeholder="部门经理姓名" type="text" readonly class="input-text size-L">
+            </div>
+        </div>
+        <div class="row cl mt-5">
+            <label style="margin-top:10px;" class="form-label col-xs-2" for="rchargeComment">
+                部门经理意见：
+            </label>
+            <div class="formControls col-xs-4">
+                <select style="height:41px;" class="select size-L" id="rchargeComment" name="rchargeComment">
+                    <option value="同意">同意</option>
+                    <option value="驳回">驳回</option>
+                </select>
+            </div>
+        </div>
+        <button id="btnSaveRC" type="button" class="btn btn-primary btn-block mt-5">保存</button>
+    </div>
+</div>
+<div class="footer">Copyright &copy;2018-2028 Newer All Rights Reserved.</div>
+<script src="js/jquery-3.3.1.min.js"></script>
+<script src="static/h-ui/js/H-ui.min.js"></script>
+<script src="static/layer/2.4/layer.js"></script>
+<script src="js/jquery.dataTables.min.js"></script>
+<script>
+    $(window).on('load',()=>{
+        $("#buka").hide();
+        fetchdata();
+        $("#btnSearch").click(() => {
+            fetchdata();
+        });
+        $("#btnSaveRC").click(() => {
+            var formData = {
+                rID:$("#rID").val(),
+                rchargeName: $("#rchargeName").val(),
+                rchargeComment:$("#rchargeComment").val(),
+            }
+            // console.log(formData);
+            $.ajax({
+                type:'post',
+                url: '/attendance/api/saveRCard',
+                data:formData,
+                dataType:'json',
+                success:function (data) {
+                    layer.msg(data.message, {icon: 1, time: 1000});
+                    setTimeout(() => {
+                        location.replace(location.href);
+                    }, 800);
+                }
+            });
+        });
+    });
+    function fetchdata() {
+        var formData = {
+            beginDate: $("#beginDate").val(),
+            endDate: $("#endDate").val(),
+        }
+        $.ajax({
+            type: 'post',
+            url: '/attendance/api/findRCards',
+            data: formData,
+            dataType: 'json',
+            success: function (data) {
+                // console.log(data);
+                if (data.code && data.code == 400) {
+                    layer.msg(data.message, {icon: 1, time: 1000});
+                    return;
+                }
+                if (data) {
+                    $("tbody").empty();
+                }
+                var text = ``;
+                $.each(data, (i, rc) => {
+                    var step = '';
+                    if (rc.rStep == 1) {
+                        step = '提出申请';
+                    } else if (rc.rStep == 2) {
+                        step = '部门审核通过';
+                    } else if (rc.rStep == 3) {
+                        step = 'HR审核通过';
+                    } else if (rc.rStep == 4) {
+                        step = '驳回';
+                    }
+                    var type='';
+                    if(rc.rType == 'A'){
+                        type = '上班补卡';
+                    } else if(rc.rType == 'B'){
+                        type = '下班补卡';
+                    }
+                    text += `
+                            <tr id="${rc.rID}" class="text-c">
+                                <td>${rc.rID}</td>
+                                <td>${rc.rUserName}</td>
+                                <td>${rc.rDept}</td>
+                                <td>${rc.rDate}</td>
+                                <td>${type}</td>
+                                <td>${step}</td>
+                                <td>${rc.reason}</td>
+                                <td>
+                                <button onclick="findRCById(${rc.rID})" class="btn btn-success">审批</button>
+                                </td>
+                            </tr>
+                            `;
+                });
+                $("tbody").append(text);
+                //dataTable插件分页
+                $("#chargercard-table").dataTable({
+                    language:{
+                        url: "/attendance/resources/js/zh_CN.txt"
+                    },
+                    retrieve:true
+                });
+            }
+        });
+    }
+
+    function findRCById(rID) {
+        $("#buka").show()
+        $.get('/attendance/api/findByRCId', {rID: rID}, (data) => {
+            $("#rID").val(rID);
+            $("#rDate").val(data.rDate);
+            var type='';
+            if(data.rType=='A'){
+                type="上班补卡";
+            } else if(data.rType=='B'){
+                type="下班补卡";
+            }
+            $("#rType").val(type);
+            $("#reason").val(data.reason);
+            $("#rchargeName").val(data.rchargeName);
+        });
+    }
+</script>
+</body>
+</html>

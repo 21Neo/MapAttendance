@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>H-ui</title>
+    <link rel="shortcut icon" href="/attendance/resources/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="/attendance/resources/static/h-ui/css/H-ui.min.css">
+    <link rel="stylesheet" href="/attendance/resources/static/h-ui.admin/css/H-ui.admin.css">
+    <link rel="stylesheet" href="/attendance/resources/static/Hui-iconfont/1.0.8/iconfont.css">
+    <link rel="stylesheet" href="/attendance/resources/static/h-ui.admin/skin/default/skin.css" id="skin">
+    <link rel="stylesheet" href="/attendance/resources/static/h-ui.admin/css/style.css">
+</head>
+<body>
+<nav class="breadcrumb">
+    <i class="Hui-iconfont">&#xe67f;</i>&nbsp;首页
+    <span class="c-green en">&gt;</span>员工管理
+    <a class="btn btn-success-outline radius r" style="line-height: 1.6em;margin-top: 3px"
+       href="javascript:location.replace(location.href);" title="刷新">
+        <i class="Hui-iconfont">&#xe68f;</i>
+    </a>
+</nav>
+<div class="page-container">
+
+    <form id="form" class="form form-horizontal">
+        <div class="row cl">
+            <label class="form-label col-xs-2" for="beginDate">
+                开始日期:
+            </label>
+            <div class="formControls col-xs-3">
+                <input id="beginDate" class="input-text " type="date">
+            </div>
+            <label class="form-label col-xs-2" for="endDate">
+                截止日期:
+            </label>
+            <div class="formControls col-xs-3">
+                <input id="endDate" class="input-text" type="date">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="formControls  col-xs-3 col-xs-offset-2">
+                <input type="button" id="btnSearch"
+                       class="btn btn-success radius"
+                       value="&nbsp;查&nbsp;&nbsp;&nbsp;&nbsp;询&nbsp;">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="reset" class="btn btn-default radius"
+                       value="&nbsp;重&nbsp;&nbsp;&nbsp;&nbsp;置&nbsp;">
+            </div>
+        </div>
+    </form>
+    <div class="mt-20">
+        <table class="table table-border table-bordered table-hover table-bg table-sort">
+            <thead>
+            <tr class="text-c">
+                <th width="40">ID</th>
+                <th width="50">用户名</th>
+                <th width="50">姓名</th>
+                <th width="50">入职日期</th>
+                <th width="50">权限</th>
+                <th width="50">是不是管理员</th>
+                <th width="50">部门</th>
+                <th width="50">工资</th>
+                <th width="50">班次</th>
+                <th width="50">操作</th>
+            </tr>
+            </thead>
+            <tfoot>
+            <tr class="text-c">
+                <th width="40">ID</th>
+                <th width="50">用户名</th>
+                <th width="50">姓名</th>
+                <th width="50">入职日期</th>
+                <th width="50">权限</th>
+                <th width="50">是不是管理员</th>
+                <th width="50">部门</th>
+                <th width="50">工资</th>
+                <th width="50">班次</th>
+                <th width="50">操作</th>
+            </tr>
+            </tfoot>
+
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+<footer class="footer mt-20">
+    <div class="container">
+        Copyright &copy;2018-2028 SONG.net All Rights Reserved.
+    </div>
+</footer>
+<script src="/attendance/resources/js/jquery-3.3.1.min.js"></script>
+<script src="/attendance/resources/js/jquery.dataTables.min.js"></script>
+<script src="/attendance/resources/static/h-ui/js/H-ui.min.js"></script>
+<script src="/attendance/resources/static/h-ui.admin/js/H-ui.admin.js"></script>
+<script src="/attendance/resources/static/layer/2.4/layer.js"></script>
+<script src="static/layer/laypage.js"></script>
+<script>
+    $(window).on('load',()=>{
+        // 隐藏表格
+        $("table").hide()
+        fetch()
+
+        $("#btnSearch").click(() => {
+            fetch()
+        })
+    })
+
+    function fetch() {
+        var formData = {
+            beginDate: $("#beginDate").val(),
+            endDate: $("#endDate").val(),
+        }
+        $.get("/attendance/api/users", formData,(data) => {
+            console.log(data)
+            if (data.code && data.code == 400) {
+                layer.msg(data.message, {icon: 1, time: 1000});
+                return;
+            }
+            if(data){
+                $("tbody").empty()
+                // 显示表格
+                $("table").show()
+            }
+            var text = ``
+            $.each(data, (i, item) => {
+                text += `
+                <tr id="${item.userID}" class="text-c">
+                  <td>${item.userID}</td>
+                  <td>${item.loginID}</td>
+                  <td>${item.username}</td>
+                  <td>${item.Regdate}</td>
+                  <td>${item.rights}</td>
+                  <td>${item.ismanager}</td>
+                  <td>${item.dept}</td>
+                  <td>${item.salary}</td>
+                  <td>${item.schedulingID}</td>
+                  <td>
+                    <button onclick="editUserInfo('修改员工信息',${item.userID})" class="btn btn-success radius" >
+                      修改
+                    </button>
+                    &nbsp;&nbsp;
+                    <button onclick="removeUserInfo(${item.userID},'${item.loginID}')" class="btn btn-danger radius">
+                      删除
+                    </button>
+                  </td>
+                </tr>
+                `
+            })
+            $("tbody").append(text)
+            // jquery datatables 插件实现分页和条件查询
+            $(".table-hover").DataTable({
+                language: {
+                    url: "js/zh_CN.txt"
+                },
+                retrieve: true
+            })
+        }, 'json')
+    }
+
+    function removeUserInfo(userID,loginID) {
+        layer.confirm("是否确认删除"+loginID+"?",()=>{
+            $.ajax({
+                type: "delete",
+                url:"/attendance/api/remove?userID="+userID,
+                dataType: "json",
+                success: function (data) {
+                    setTimeout(()=>{
+                        //刷新
+                        location.reload()
+                        //关闭确认窗口
+                        layer.close()
+                    },800)
+                }
+            })
+        })
+    }
+
+    function editUserInfo(title, userID) {
+        // id: 0 新增; !0 修改
+        localStorage.setItem("userID", userID)
+
+        // 显示窗口(标题,url,width,height)
+        layer_show(title, '/attendance/resources/user-modify.html', 600, 500)
+    }
+</script>
+</body>
+</html>

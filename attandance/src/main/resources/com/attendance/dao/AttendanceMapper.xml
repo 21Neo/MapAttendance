@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--权限映射文件-->
+<mapper namespace="com.attendance.dao.AttendanceMapper">
+
+    <resultMap id="result-attendance" type="com.attendance.pojo.UserAttendance">
+        <id property="aID" column="aID"/>
+        <result column="aUserID" property="aUserID"/>
+        <result column="auserName" property="auserName"/>
+        <result column="beginTime" property="beginTime"/>
+        <result column="amType" property="amType"/>
+        <result column="endTime" property="endTime"/>
+        <result column="pmType" property="pmType"/>
+        <result column="distance" property="distance"/>
+        <result column="aDept" property="aDept"/>
+        <result column="attRemark" property="attRemark"/>
+
+    </resultMap>
+
+    <!--模糊查询-->
+    <select id="findByParam" resultMap="result-attendance">
+        select aID,aUserID,auserName,beginTime,amType,endTime,pmType,distance,aDept,attRemark from userattendance
+        <where>
+            and aUserID=#{aUserID}
+            <if test="beforeTime != null || afterTime != null">
+                and beginTime BETWEEN #{beforeTime} and #{afterTime}
+            </if>
+        </where>
+    </select>
+
+    <select id="findAll" resultMap="result-attendance">
+        select aID,aUserID,auserName,beginTime,amType,endTime,pmType,distance,aDept,attRemark from userattendance
+        <where>
+            1=1
+            <if test="aDept != null and aDept != ''">
+                and aDept like concat('%',#{aDept},'%')
+            </if>
+            <if test="beginTime != null">
+                and date_format(beginTime,'%Y-%m') = date_format(#{beginTime},'%Y-%m')
+            </if>
+        </where>
+        order by auserName
+    </select>
+
+</mapper>

@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>H-ui</title>
+    <link rel="shortcut icon" href="/attendance/resources/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="/attendance/resources/static/h-ui/css/H-ui.min.css">
+    <link rel="stylesheet" href="/attendance/resources/static/h-ui.admin/css/H-ui.admin.css">
+    <link rel="stylesheet" href="/attendance/resources/static/Hui-iconfont/1.0.8/iconfont.css">
+    <link rel="stylesheet" href="/attendance/resources/static/h-ui.admin/skin/default/skin.css" id="skin">
+    <link rel="stylesheet" href="/attendance/resources/static/h-ui.admin/css/style.css">
+</head>
+<body>
+<article class="page-container">
+    <form class="form form-horizontal" id="form-edit-user" method="post">
+        <div class="row cl">
+            <label for="loginID" class="form-label col-xs-4 col-ms-4"
+                   style="padding-left: 8px;">
+                <span class="c-red">*</span>&nbsp;用户名:
+            </label>&nbsp;
+            <div class="formControls col-xs-4 col-sm-4">
+                <input type="hidden" id="userID" name="userID">
+                <input type="text" class="input-text radius"
+                       placeholder="用户名" id="loginID" name="loginID">
+                <img src="images/error.jpg" width="20" height="20">
+            </div>
+        </div>
+        <div class="row cl">
+            <label for="password" class="form-label col-xs-4 col-ms-4"
+                   style="padding-left: 8px;">
+                <span class="c-red">*</span>&nbsp;密码:
+            </label>
+            <div class="formControls col-xs-4 col-sm-4">
+                <input type="password" class="input-text radius"
+                       placeholder="密码" id="password" name="password">
+            </div>
+        </div>
+        <div class="row cl">
+            <label for="username" class="form-label col-xs-4 col-ms-4"
+                   style="padding-left: 8px;">
+                <span class="c-red">*</span>&nbsp;姓名:
+            </label>
+            <div class="formControls col-xs-4 col-sm-4">
+                <input type="text" step="0.01" class="input-text radius"
+                       placeholder="姓名" id="username" name="username">
+            </div>
+        </div>
+        <div class="row cl">
+            <label for="Regdate" class="form-label col-xs-4 col-ms-4"
+                   style="padding-left: 8px;">
+                <span class="c-red">*</span>&nbsp;入职日期:
+            </label>
+            <div class="formControls col-xs-4 col-sm-4">
+                <input type="date" class="input-text radius"
+                       placeholder="入职日期" id="Regdate" name="Regdate"  >
+            </div>
+        </div>
+        <div class="row cl">
+            <label for="rights" class="form-label col-xs-4 col-ms-4"
+                   style="padding-left: 8px;">
+                <span class="c-red">*</span>&nbsp;管理权限:
+            </label>
+            <div class="formControls col-xs-4 col-sm-4">
+               <select id="rights" name="rights" class="input-text radius"></select>
+            </div>
+        </div>
+        <div class="row cl">
+            <label for="ismanager" class="form-label col-xs-4 col-ms-4"
+                   style="padding-left: 8px;">
+                <span class="c-red">*</span>&nbsp;是否是管理人员:
+            </label>
+            <div class="formControls col-xs-4 col-sm-4">
+               <!-- <input type="text" class="input-text radius"
+                       placeholder="是否是管理人员" id="ismanager" name="ismanager">-->
+                <select id="ismanager" name="ismanager" class="input-text radius">
+                    <option value="y" id="y">是</option>
+                    <option value="n" id="n">否</option>
+                </select>
+            </div>
+        </div>
+        <div class="row cl">
+            <label for="dept" class="form-label col-xs-4 col-ms-4"
+                   style="padding-left: 8px;">
+                <span class="c-red">*</span>&nbsp;部门:
+            </label>
+            <div class="formControls col-xs-4 col-sm-4">
+                <!--<input type="text" class="input-text radius"
+                       placeholder="部门" id="dept" name="dept">-->
+                <select id="dept" name="dept" class="input-text radius"></select>
+
+            </div>
+        </div>
+        <div class="row cl">
+            <label for="salary" class="form-label col-xs-4 col-ms-4"
+                   style="padding-left: 8px;">
+                <span class="c-red">*</span>&nbsp;工资:
+            </label>
+            <div class="formControls col-xs-4 col-sm-4">
+                <input type="number" class="input-text radius" step="0.01"
+                       placeholder="工资" id="salary" name="salary">
+            </div>
+        </div>
+        <div class="row cl">
+            <label for="schedulingID" class="form-label col-xs-4 col-ms-4"
+                   style="padding-left: 8px;">
+                <span class="c-red">*</span>&nbsp;班次:
+            </label>
+            <div class="formControls col-xs-4 col-sm-4s">
+                <input type="text" class="input-text radius"
+                       placeholder="班次" id="schedulingID" name="schedulingID">
+            </div>
+        </div>
+        <div class="row cl">
+            <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+                <input id="btnSave" type="submit" class="btn btn-primary radius"
+                       value="&nbsp;&nbsp;保存&nbsp;&nbsp;">
+            </div>
+        </div>
+    </form>
+</article>
+<script src="/attendance/resources/js/jquery-3.3.1.min.js"></script>
+<script src="/attendance/resources/static/layer/2.4/layer.js"></script>
+<script src="/attendance/resources/js/jquery.validate.min.js"></script>
+<script src="/attendance/resources/static/h-ui/js/H-ui.min.js"></script>
+<script src="/attendance/resources/static/h-ui.admin/js/H-ui.admin.js"></script>
+
+<script src="/attendance/resources/js/jquery.validation/jquery.validate.js"></script>
+<script src="/attendance/resources/js/jquery.validation/validate-methods.js"></script>
+<script src="/attendance/resources/js/jquery.validation/messages_zh.js"></script>
+<script>
+    $(window).on('load', () => {
+        $.get("/attendance/api/userrights",
+            (data) => {
+            console.log(data)
+                if(data.code == 400){
+                    layer.msg(data.message, {icon: 1, time: 1000});
+                    return;
+                }
+                $("#rights").append(`<option value="-1">请选择</option>`)
+                $.each(data, (i, permission) => {
+                    // console.log(permission.pid,permission.rights)
+                    var childNode = `<option value="${permission.pgroup}">${permission.pgroup}</option>`
+                    $("#rights").append(childNode)
+                })
+            },
+            "json")
+        $("#dept").append(`<option value="-1">请选择</option>`)
+        $("#dept").append(`<option value="财务">财务</option>`)
+        $("#dept").append(`<option value="销售">销售</option>`)
+        $("#dept").append(`<option value="HR">HR</option>`)
+        $("#dept").append(`<option value="技术">技术</option>`)
+        // $("#btnSave").attr("disabled",true)
+        $("img").hide()
+        $("#loginID").blur(() => {
+            /*if($("#loginID").equals("")||$("#loginID")==null){
+                $("img").attr("src", "images/error.jpg")
+                $("img").show()
+            }*/
+            //字段是空的就不走？
+            if(!$("#loginID").val().trim()) {
+                $("#loginID").focus();
+                return
+            }
+            $.get("/attendance/api/findByLoginID", {loginID: $("#loginID").val()}, (data) => {
+                // console.log(data)
+                // $("small").html(data.message)
+                if (data.code == 200){
+                    $("img").attr("src", "images/success.jpg")
+                } else {
+                    $("img").attr("src", "images/error.jpg")
+                }
+                $("img").show()
+            }, "json")
+        })
+
+
+        // 表单参数
+        $("#form-edit-user").validate({
+            rules: {
+                loginID: {
+                    required: true
+                },
+                username: {
+                    required: true
+                },
+                /* rights: {
+                     required: true
+                 },*/
+                ismanager: {
+                    required: true
+                },
+                dept: {
+                    required: true
+                },
+                salary: {
+                    required: true
+                },
+                schedulingID: {
+                    required: true
+                },
+                password:{
+                    required:true
+                }
+            },
+            onkeyup: false,
+            focusCleanup: true,
+            success: "valid",
+            submitHandler: function (form) {
+                var formData = {
+                    loginID  : $("#loginID").val(),
+                    username :$("#username").val(),
+                    Regdate:  $("#Regdate").val(),
+                    rights: $("#rights").val(),
+                    ismanager: $("#ismanager").val(),
+                    dept: $("#dept").val(),
+                    salary: $("#salary").val(),
+                    schedulingID: $("#schedulingID").val(),
+                    password: $("#password").val()
+                }
+                $("#btnSave").attr("disabled",false)
+                $.ajax({
+                    type: "post",
+                    url: "/attendance/api/addUser",
+                    data: formData,
+                    dataType: "json",
+                    success: function (data) {
+                        // 错误信息,延时长,图标醒目
+                        layer.msg(data.message, {icon: 1, time: 1000})
+                        if (data.code && data.code == 400) {
+                            // layer.msg(data.message, {icon: 1, time: 1000});
+                            return;
+                        }
+                        setTimeout(() => {
+                            if (data.code == 200) {
+                                $(form).empty()
+                                window.location.reload()
+                            }
+                        }, 800)
+                    },
+                    error: function (jqXHR, textStatus, errorthrown) {
+                        layer.alert("系统内部错误,请与管理员联系!")
+                    }
+                })
+            }
+        })
+    })
+</script>
+</body>
+</html>

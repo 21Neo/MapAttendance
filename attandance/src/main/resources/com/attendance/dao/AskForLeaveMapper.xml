@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--请假映射文件-->
+<mapper namespace="com.attendance.dao.AskForLeaveMapper">
+    <resultMap id="result-afl" type="com.attendance.pojo.AskForLeave">
+        <id property="askid" column="askID"/>
+        <result property="userid" column="userID"/>
+        <result property="userName" column="userName"/>
+        <result property="entryDate" column="entryDate"/>
+        <result property="days" column="days"/>
+        <result property="chargeName" column="chargeName"/>
+        <result property="chargeComment" column="chargeComment"/>
+        <result property="chargeDate" column="chargeDate"/>
+        <result property="hrName" column="hrName"/>
+        <result property="hrComment" column="hrComment"/>
+        <result property="hrDate" column="hrDate"/>
+        <result property="askDept" column="askDept"/>
+        <result property="step" column="step"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+    <select id="findSelfafl" resultMap="result-afl">
+        select askID,userID,userName,entryDate,days,askDept,step,remark from askforleave
+        <where>
+            userID = #{userid}
+            <if test="beginDate != null and endDate != null">
+             and entryDate BETWEEN #{beginDate} and #{endDate}
+            </if>
+        </where>
+    </select>
+    <select id="findChargeafl" resultMap="result-afl">
+        select askID,userID,userName,entryDate,days,askDept,step,remark from askforleave
+        <where>
+            askDept = #{askDept} and step=1
+            <if test="beginDate != null and endDate != null">
+                 and entryDate BETWEEN #{beginDate} and #{endDate}
+            </if>
+        </where>
+    </select>
+    <select id="findHrafl" resultMap="result-afl">
+        select askID,userID,userName,entryDate,days,askDept,step,remark from askforleave
+        <where>
+            (step=2 or (askDept = "HR" and step=1))
+            <if test="beginDate != null and endDate != null">
+                and entryDate BETWEEN #{beginDate} and #{endDate}
+            </if>
+        </where>
+    </select>
+</mapper>

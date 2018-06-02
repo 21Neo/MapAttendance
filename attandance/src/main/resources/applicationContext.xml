@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:util="http://www.springframework.org/schema/util" xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+    <!--扫描serice dao 自动注入bean-->
+    <context:component-scan base-package="com.*.dao,com.*.service"/>
+
+    <!--读取JDBC资源-->
+    <util:properties id="properties" location="classpath:jdbc.properties"/>
+
+    <!--数据源(数据库连接池)-->
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+        <property name="driverClass" value="#{properties[driverClass]}"/>
+        <property name="jdbcUrl" value="#{properties[jdbcUrl]}"/>
+        <property name="user" value="#{properties[user]}"/>
+        <property name="password" value="#{properties[password]}"/>
+
+        <!--连接池中保留的最小的连接数-->
+        <property name="minPoolSize" value="10"/>
+        <!--连接池中最大的连接数-->
+        <property name="maxPoolSize" value="60"/>
+        <!--连接池中初始的连接数-->
+        <property name="initialPoolSize" value="10"/>
+        <!--连接池执行时间-->
+        <property name="checkoutTimeout" value="1800"/>
+        <!--一次同时生成的连接数-->
+        <property name="acquireIncrement" value="10"/>
+    </bean>
+
+    <!--SqlSessionFactory 数据源-->
+    <bean id="sqlSessionFactory"
+          class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <!--配置Mapper(DAO) 接口的自动扫描器，并实例化-->
+    <bean id="scannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <!--指定扫描 dao 接口的顶级包-->
+        <property name="basePackage" value="com.*.dao"/>
+    </bean>
+
+    <bean id="multipartResolver"
+          class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <!-- set the max upload size100MB -->
+        <property name="maxUploadSize">
+            <value>104857600</value>
+        </property>
+        <property name="maxInMemorySize">
+            <value>4096</value>
+        </property>
+        <property name="defaultEncoding">
+            <value>utf-8</value>
+        </property>
+    </bean>
+
+    <!--事务切面-->
+    <!--事务管理器-->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+    <!--事务注解 + 业务方法的@Transactional注解-->
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+</beans>

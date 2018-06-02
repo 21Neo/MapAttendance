@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--权限映射文件-->
+<mapper namespace="com.attendance.dao.PermissionMapper">
+    <resultMap id="result-pms" type="com.attendance.pojo.Permission">
+        <id property="pid" column="pID"/>
+        <result property="pgroup" column="pgroup"/>
+        <result property="rights" column="rights"/>
+    </resultMap>
+    <select id="findByName" resultMap="result-pms">
+        select pid,pgroup,rights from permission
+        <where>
+            pgroup=#{pgroup}
+        </where>
+    </select>
+</mapper>
